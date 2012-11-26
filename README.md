@@ -1,6 +1,6 @@
 # swing-util
 
-Some Clojure utility functions for working with swing.
+Some Clojure utility functions for working with Swing.
 
 ## Usage
 
