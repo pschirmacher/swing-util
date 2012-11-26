@@ -4,12 +4,15 @@ Some Clojure utility functions for working with swing.
 
 ## Usage
 
+"Hello, world!" example. Both the text field and the label are bound to the value of the atom 'name'.
+
 	(show (frame "it works!"
 	             (let [name (atom "<name>")]
 	               (column :center
 	                       (txt 15 name)
 	                       (row (label "hi") (label name))))))
 
+A table that shows some data. One column is editable. 'space-cowboys' is updated accordingly.
 
 	(show (frame "table"
 	             (let [space-cowboys (atom [{:name "Luke"
