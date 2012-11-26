@@ -10,6 +10,7 @@ Some Clojure utility functions for working with swing.
 	                       (txt 15 name)
 	                       (row (label "hi") (label name))))))
 
+
 	(show (frame "table"
 	             (let [space-cowboys (atom [{:name "Luke"
 	                                         :size "normal"}
