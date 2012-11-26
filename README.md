@@ -5,10 +5,10 @@ Some Clojure utility functions for working with swing.
 ## Usage
 
 	(show (frame "it works!"
-	                     (let [name (atom "<name>")]
-	                       (column :center
-	                               (txt 15 name)
-	                               (row (label "hi") (label name))))))
+	             (let [name (atom "<name>")]
+	               (column :center
+	                       (txt 15 name)
+	                       (row (label "hi") (label name))))))
 
 ## License
 
