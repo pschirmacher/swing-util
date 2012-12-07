@@ -3,7 +3,7 @@
             JScrollPane SwingUtilities JTabbedPane JTextArea ButtonGroup JRadioButton JCheckBox ListSelectionModel
             AbstractButton JToggleButton JComboBox AbstractListModel ComboBoxModel]
            [javax.swing.table AbstractTableModel]
-           [javax.swing.event ListSelectionListener DocumentListener]
+           [javax.swing.event ListSelectionListener DocumentListener ChangeListener]
            [javax.swing.text JTextComponent]
            [java.awt BorderLayout Component GridLayout FlowLayout Dimension]
            [java.awt.event ActionListener ItemListener MouseAdapter]))
@@ -21,6 +21,20 @@
     (.setLayout row (FlowLayout.))
     (doseq [c components]
       (.add row c))
+    row))
+
+(defn right-row [& components]
+  (let [row (doto (Box. BoxLayout/LINE_AXIS)
+                   (.add (Box/createHorizontalGlue)))]
+    (doseq [c components]
+      (.add row c))
+    row))
+
+(defn left-row [& components]
+  (let [row (Box. BoxLayout/LINE_AXIS)]
+    (doseq [c components]
+      (.add row c))
+    (.add row (Box/createHorizontalGlue))
     row))
 
 (defn column [alignment & components]
@@ -209,6 +223,14 @@
                                                    (valueChanged [e] (when-not (.getValueIsAdjusting e) (action-fn)))))))
   target)
 
+(defmethod action-bind [JTabbedPane clojure.lang.IFn]
+  [target action]
+  (.addChangeListener target
+                      (reify ChangeListener
+                        (stateChanged [this event]
+                          (action event))))
+  target)
+
 (defn txt
   ([data]
     (doto (JTextField.)
@@ -345,8 +367,9 @@
   (.isEnabled component))
 
 (defn frame
-  [title container]
+  [title container & {:keys [resizable] :or {resizable false}}]
   (doto (JFrame. title)
+    (.setResizable resizable)
     (.setContentPane container)))
 
 (defn show
