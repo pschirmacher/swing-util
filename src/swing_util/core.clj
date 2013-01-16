@@ -167,11 +167,10 @@
                    (changedUpdate [e] (sync-atom))
                    (insertUpdate [e] (sync-atom))
                    (removeUpdate [e] (sync-atom)))
-        watch-fn (fn [k r o n] (when (not= n (.getText target))
-                                 (later
-                                   (without-document-listener target listener
-                                     (keeping-caret-position target
-                                                             (.setText target n))))))]
+        watch-fn (fn [k r o n] (later
+                                (without-document-listener target listener
+                                                           (keeping-caret-position target
+                                                                                   (.setText target @data)))))]
     (.setText target @data)
     (.. target getDocument (addDocumentListener listener))
     (add-watch data target watch-fn)
@@ -189,7 +188,7 @@
                    (itemStateChanged [_] (sync-atom)))
         watch-fn (fn [k r o n]
                    (.removeItemListener target listener)
-                   (.setSelected target n)
+                   (.setSelected target @data)
                    (.addItemListener target listener))]
     (.setSelected target @data)
     (.addItemListener target listener)
@@ -204,7 +203,7 @@
   [target data]
   (.setText target (str @data))
   (add-watch data target (fn [k r o n]
-                           (.setText target (str n)))))
+                           (.setText target (str @data)))))
 
 (defmulti action-bind (fn [target action] [(type target) (type action)]))
 
@@ -288,7 +287,7 @@
                   (getSelectedItem [] @selected))]
       (add-watch items-holder model (fn [k r o n]
                                       (let [from-idx 0
-                                            to-idx (count n)]
+                                            to-idx (count @items-holder)]
                                         (later
                                           (.setSelectedItem model nil)
                                           (.fireContentsChanged model model from-idx to-idx)))))
